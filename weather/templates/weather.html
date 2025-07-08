@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Weather Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-white min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-center mb-4 text-blue-700">🌤️ AI Weather Chatbot</h2>
+
+        <!-- Chat Box -->
+        <div class="h-96 overflow-y-auto border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50" id="chat-box">
+            {% for msg in chat_history %}
+                {% if msg.sender == "user" %}
+                    <div class="flex justify-end mb-2">
+                        <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
+                            {{ msg.text }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex justify-start mb-2">
+                        <div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-xs">
+                            {{ msg.text }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="flex justify-start mb-2">
+            <a href="{% url 'clear_chat' %}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm">
+                🗑️ Clear Chat
+            </a>
+        </div>
+
+
+        <!-- Chat Form -->
+        <form method="POST" class="flex gap-2">
+            {% csrf_token %}
+            <input type="text" name="query" placeholder="Ask about the weather..." required
+                class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg">Send</button>
+        </form>
+    </div>
+
+    <script>
+        // Auto-scroll to bottom on load
+        const chatBox = document.getElementById('chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    </script>
+</body>
+</html>
